@@ -95,6 +95,7 @@ export class Monitor extends EventEmitter {
         firstSeen: info.at, lastSeen: info.at,
         packets: 0, _count: 0, fps: 0,
         lastSeq: info.sequence ?? null, dropped: 0,
+        _intervalEma: null, hz: 0,
         data: info.data,
       };
       this.sources.set(key, src);
@@ -105,6 +106,15 @@ export class Monitor extends EventEmitter {
     if (info.sequence != null && src.lastSeq != null) {
       const gap = (info.sequence - src.lastSeq + 256) & 0xff;
       if (gap > 1 && gap < 200) src.dropped += gap - 1;
+    }
+
+    // Refresh-rate (Hz): exponential moving average of inter-packet interval.
+    // Far smoother and finer than counting packets per second.
+    const dt = info.at - src.lastSeen;
+    if (dt > 0 && dt < 2000) {
+      const a = 0.1;
+      src._intervalEma = src._intervalEma == null ? dt : src._intervalEma * (1 - a) + dt * a;
+      src.hz = src._intervalEma > 0 ? 1000 / src._intervalEma : 0;
     }
 
     src.lastSeq    = info.sequence ?? src.lastSeq;
@@ -122,6 +132,7 @@ export class Monitor extends EventEmitter {
     const now = this._now();
     for (const [key, src] of this.sources) {
       if (now - src.lastSeen > this.staleMs) { this.sources.delete(key); continue; }
+      if (src._count === 0) { src.hz = 0; src._intervalEma = null; } // stream paused
       src.fps = src._count;
       src._count = 0;
     }

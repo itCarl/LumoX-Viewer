@@ -57,7 +57,7 @@ function renderSources(sources) {
       </div>
       <div class="row2">
         <span>${s.ip}</span>
-        <span class="fps ${live}">${s.fps} fps</span>
+        <span class="fps ${live}">${s.hz ? s.hz.toFixed(1) : '0'} Hz</span>
         <span>${s.dropped ? '⚠ ' + s.dropped : ''}</span>
       </div>`;
     li.onclick = () => focus(s.key, s);
@@ -172,7 +172,7 @@ function updateInfo(m) {
   if (m.universe != null) set('i-univ', m.universe);
   if ('sourceName' in m) set('i-name', m.sourceName || '—');
   if (m.ip) set('i-ip', m.ip);
-  set('i-fps', m.fps);
+  set('i-hz', m.hz != null ? m.hz.toFixed(1) + ' Hz' : '—');
   set('i-prio', m.priority ?? '—');
   if ('sequence' in m) set('i-seq', m.sequence);
   set('i-pkts', m.packets);

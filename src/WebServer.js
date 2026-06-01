@@ -111,7 +111,7 @@ export class WebServer {
     const meta = sources.map((s) => ({
       key: s.key, proto: s.proto, universe: s.universe, ip: s.ip,
       sourceName: s.sourceName, priority: s.priority,
-      fps: s.fps, packets: s.packets, dropped: s.dropped,
+      hz: s.hz, fps: s.fps, packets: s.packets, dropped: s.dropped,
       ageMs: this.monitor._now() - s.lastSeen, slots: s.data.length,
     }));
     this._send('sources', meta);
@@ -125,7 +125,7 @@ export class WebServer {
     if (now - this._lastFrameAt < FRAME_MIN_MS) return;
     this._lastFrameAt = now;
     this._send('frame', {
-      key: src.key, universe: src.universe, fps: src.fps, packets: src.packets,
+      key: src.key, universe: src.universe, hz: src.hz, fps: src.fps, packets: src.packets,
       dropped: src.dropped, priority: src.priority, sequence: src.lastSeq,
       data: Buffer.from(src.data).toString('base64'),
     });

@@ -117,7 +117,7 @@ export class ConsoleView {
     } else {
       out.push(`${C.dim}  ${[
         pad('', 1), pad('PROTO', 7), pad('UNIVERSE', 9), pad('SOURCE', 22),
-        pad('IP', 16), padL('FPS', 4), padL('PRIO', 5),
+        pad('IP', 16), padL('Hz', 6), padL('PRIO', 5),
         padL('PKTS', 9), padL('DROP', 6), padL('AGE', 5),
       ].join(' ')}${C.reset}`);
       if (!this.selectedKey) this._current();
@@ -131,14 +131,14 @@ export class ConsoleView {
   _row(s, sel) {
     const color = PROTO_COLOR[s.proto] || '';
     const age = Math.floor((this.monitor._now() - s.lastSeen) / 1000);
-    const fps = s.fps > 0 ? `${C.green}${padL(String(s.fps), 4)}${C.reset}` : padL('0', 4);
+    const hz = s.hz > 0 ? `${C.green}${padL(s.hz.toFixed(1), 6)}${C.reset}` : padL('—', 6);
     const drop = s.dropped > 0 ? `${C.red}${padL(String(s.dropped), 6)}${C.reset}` : padL('0', 6);
     const marker = sel ? `${C.yellow}▸${C.reset}` : ' ';
     const cells = [
       `${color}${pad(s.proto, 7)}${C.reset}`,
       pad(String(s.universe), 9),
       pad(trunc(s.sourceName || '—', 22), 22),
-      pad(s.ip, 16), fps,
+      pad(s.ip, 16), hz,
       padL(s.priority == null ? '—' : String(s.priority), 5),
       padL(String(s.packets), 9), drop, padL(`${age}s`, 5),
     ].join(' ');
@@ -154,7 +154,7 @@ export class ConsoleView {
     out.push(`${color}${C.bold}${s.proto.toUpperCase()}${C.reset}  ` +
       `Universe ${C.bold}${s.universe}${C.reset}  @ ${s.ip}  ` +
       `${C.dim}"${s.sourceName || '—'}"${C.reset}`);
-    out.push(`${C.gray}fps ${s.fps}   prio ${s.priority ?? '—'}   slots ${s.data.length}   ` +
+    out.push(`${C.gray}${s.hz > 0 ? s.hz.toFixed(1) : '0'} Hz   prio ${s.priority ?? '—'}   slots ${s.data.length}   ` +
       `active ${nonZero}   pkts ${s.packets}   dropped ${s.dropped}   ` +
       `[${idx}/${this.sources.length}]${C.reset}`);
     out.push('');
