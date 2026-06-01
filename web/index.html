@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LumoX-Viewer</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header id="topbar">
+    <span class="logo">LumoX-Viewer</span>
+    <span class="sub">DMX-over-IP network monitor</span>
+    <span class="spacer"></span>
+    <span id="conn" class="badge off">offline</span>
+  </header>
+
+  <main id="layout">
+    <!-- LEFT: source list -->
+    <aside id="sidebar-left">
+      <div class="pane-title">SOURCES <span id="src-count" class="muted">0</span></div>
+      <ul id="source-list"></ul>
+    </aside>
+
+    <!-- CENTER: channel grid -->
+    <section id="content">
+      <div class="pane-title">
+        <span id="grid-title">CHANNELS</span>
+        <span class="spacer"></span>
+        <div class="seg" id="fmt-toggle">
+          <button data-fmt="dec" class="active">DEC</button>
+          <button data-fmt="pct">%</button>
+          <button data-fmt="hex">HEX</button>
+        </div>
+      </div>
+      <div id="grid"></div>
+      <div id="grid-empty" class="empty">Select a source on the left.</div>
+    </section>
+
+    <!-- RIGHT: graph + info -->
+    <aside id="sidebar-right">
+      <div class="pane-title">CHANNEL <span id="ch-label" class="muted">—</span></div>
+      <canvas id="graph" width="300" height="140"></canvas>
+      <div class="graph-legend muted">last <span id="hist-len">0</span> frames</div>
+
+      <div class="pane-title">INFO</div>
+      <dl id="info">
+        <dt>Protocol</dt><dd id="i-proto">—</dd>
+        <dt>Universe</dt><dd id="i-univ">—</dd>
+        <dt>Source</dt><dd id="i-name">—</dd>
+        <dt>IP</dt><dd id="i-ip">—</dd>
+        <dt>FPS</dt><dd id="i-fps">—</dd>
+        <dt>Priority</dt><dd id="i-prio">—</dd>
+        <dt>Sequence</dt><dd id="i-seq">—</dd>
+        <dt>Packets</dt><dd id="i-pkts">—</dd>
+        <dt>Dropped</dt><dd id="i-drop">—</dd>
+        <dt>Active ch.</dt><dd id="i-active">—</dd>
+      </dl>
+    </aside>
+  </main>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
