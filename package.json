@@ -1,0 +1,15 @@
+{
+  "name": "lumox-viewer",
+  "version": "0.1.0",
+  "description": "LumoX-Viewer — see what DMX (Art-Net / sACN E1.31) is floating around the network",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "lumox-viewer": "index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "MIT"
+}
